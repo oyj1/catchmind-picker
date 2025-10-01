@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>캐치마인드 단어 뽑기 · V3</title>
+<style>
+  :root{
+    --bg:#fffaf5; --card:#ffffff; --text:#222; --muted:#5b5b5b;
+    --brand:#6C63FF; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444;
+    --shadow:0 10px 24px rgba(0,0,0,.08); --chip:#f4f4ff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: ui-rounded, "Pretendard","Apple SD Gothic Neo","Noto Sans KR", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    background: radial-gradient(1200px 700px at 20% 0%, #fff 0%, #fff4e8 60%, #ffe9fb 100%);
+    color:var(--text);
+  }
+  .app{max-width:1000px; margin:0 auto; padding:20px}
+  header{display:flex; align-items:center; gap:14px; margin-bottom:12px; flex-wrap:wrap}
+  .logo{width:48px;height:48px;border-radius:14px;background:
+    conic-gradient(from 0deg,#ff7eb3,#ffbd59,#f9f871,#8cfac6,#7ad3ff,#c3a6ff,#ff7eb3);
+    display:grid;place-items:center;box-shadow:var(--shadow);font-weight:900}
+  h1{margin:0; font-size:clamp(20px,2.4vw,28px)}
+  .sub{color:var(--muted)}
+  .grid{display:grid; gap:14px}
+  @media(min-width:860px){ .grid{grid-template-columns: 1fr 1fr} }
+  .card{background:var(--card); border:1px solid #e5e7eb; border-radius:16px; padding:14px; box-shadow:var(--shadow)}
+  .controls{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+  .row{display:flex; flex-wrap:wrap; gap:8px}
+  button{
+    border:0; background:var(--brand); color:#fff; padding:12px 16px; border-radius:14px; font-weight:900;
+    cursor:pointer; box-shadow:var(--shadow); font-size:16px;
+  }
+  button.ghost{background:#fff;color:#333; border:1px solid #e5e7eb}
+  button.ok{background:var(--ok)} .button.warn{background:var(--warn)} .button.danger{background:var(--danger)}
+  select, input[type="text"], input[type="number"], textarea{
+    padding:10px 12px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; font-size:16px;
+  }
+  label{display:flex; align-items:center; gap:6px}
+  .chip{background:var(--chip); border:1px solid #e5e7eb; padding:6px 10px; border-radius:999px; font-weight:700}
+  .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+  /* Primary CTA */
+  .cta{display:grid; gap:12px; place-items:center; padding:10px 0}
+  .cta button#pick{font-size: clamp(22px, 3.2vw, 28px); padding: 16px 24px; border-radius:18px; box-shadow:0 14px 26px rgba(108,99,255,.25)}
+  /* Big Reveal Overlay */
+  .reveal{position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    background: radial-gradient(1200px 700px at 50% -10%, rgba(255,255,255,.98), rgba(255,245,230,.98)); z-index:50}
+  .reveal.active{display:flex}
+  .reveal-box{text-align:center; padding:28px; border-radius:24px; background:#fff; border:2px solid #f1e5ff; box-shadow:0 30px 60px rgba(0,0,0,.18); max-width:90vw}
+  .word{font-weight:1000; line-height:1.05; letter-spacing:-0.5px; font-size: clamp(52px, 9vw, 140px);
+    background: linear-gradient(90deg,#7ad3ff,#c3a6ff,#ff7eb3,#ffbd59,#8cfac6); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .tiny{color:var(--muted); margin-top:6px}
+  .big-controls{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:12px}
+  /* Timer */
+  .timer{ font-variant-numeric: tabular-nums; font-size:48px; font-weight:900; display:flex; gap:12px; align-items:center; justify-content:center; }
+  .bar{height:12px; background:#eef2ff; border-radius:999px; overflow:hidden; margin-top:8px}
+  .bar>i{display:block; height:100%; width:100%; background:linear-gradient(90deg,#34d399,#60a5fa)}
+  .preset{display:flex; gap:8px; flex-wrap:wrap}
+  .preset button{background:#fff; color:#333; border:1px solid #e5e7eb}
+  .preset button.active{background:#e8e8ff}
+  /* History */
+  .history{display:flex; flex-direction:column; gap:8px}
+  .history .list{display:flex; flex-wrap:wrap; gap:6px; max-height:140px; overflow:auto}
+  .token{background:#fff; border:1px solid #e5e7eb; border-radius:999px; padding:6px 10px; font-weight:700}
+  /* Settings Modal */
+  .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.35); z-index:60}
+  .modal.active{display:flex}
+  .modal .box{background:#fff; width:min(920px, 94vw); max-height:86vh; overflow:auto; border-radius:16px; border:1px solid #e5e7eb; box-shadow:var(--shadow); padding:14px}
+  .modal .top{display:flex; justify-content:space-between; align-items:center; gap:10px; position:sticky; top:0; background:#fff; padding:6px 0}
+  textarea{width:100%; min-height:160px}
+  footer{margin:14px 0 6px; color:var(--muted); font-size:13px; text-align:center}
+  kbd{background:#f4f4ff;border:1px solid #e5e7eb;border-bottom-width:2px;border-radius:6px;padding:2px 6px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">🎨</div>
+    <div>
+      <h1>캐치마인드 단어 뽑기</h1>
+      <div class="sub">아이패드·빔프로젝터 OK · 단어 크게 · 알록달록</div>
+    </div>
+    <div style="margin-left:auto">
+      <button id="openSettings" class="ghost">설정</button>
+      <button id="fullscreen" class="ghost">전체 화면</button>
+    </div>
+  </header>
+
+  <!-- Primary: Picker -->
+  <section class="card">
+    <div class="controls" style="justify-content:space-between">
+      <div class="row">
+        <label>언어
+          <select id="lang">
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <label>카테고리
+          <select id="cat"></select>
+        </label>
+        <label><input id="norepeat" type="checkbox" checked /> 이미 나온 단어 제외</label>
+        <label><input id="autotimer" type="checkbox" checked /> 공개 시 타이머 자동 시작</label>
+        <label>🔊 <input id="sound" type="checkbox" checked /></label>
+      </div>
+      <div class="row">
+        <span class="chip">총 <b id="poolCount">0</b>개 · 남은 <b id="remainCount">0</b>개</span>
+        <span class="chip">최근: <b id="lastWord">-</b></span>
+      </div>
+    </div>
+
+    <div class="cta">
+      <button id="pick" class="ok">단어 뽑기 🎲</button>
+      <div class="sub">단축키: <kbd>Space</kbd> 뽑기 · <kbd>N</kbd> 다음 · <kbd>Esc</kbd> 닫기 · <kbd>F</kbd> 전체화면 · <kbd>1/2/3/4</kbd> 프리셋</div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <!-- Timer -->
+    <section class="card">
+      <h3 style="margin:0 0 8px 0">타이머</h3>
+      <div class="preset" aria-label="타이머 프리셋">
+        <button data-sec="30">30초</button>
+        <button data-sec="60">1분</button>
+        <button data-sec="180">3분</button>
+        <button data-sec="300">5분</button>
+      </div>
+      <div class="controls" style="margin-top:8px">
+        <label>초 <input id="sec" type="number" min="5" max="600" value="30" style="width:110px"></label>
+        <button id="tStart" class="ok">시작</button>
+        <button id="tPause" class="ghost">일시정지</button>
+        <button id="tReset" class="ghost">리셋</button>
+      </div>
+      <div class="timer"><span id="clock">00:30</span></div>
+      <div class="bar"><i id="bar" style="transform:scaleX(1)"></i></div>
+    </section>
+
+    <!-- History -->
+    <section class="card">
+      <h3 style="margin:0 0 8px 0">히스토리</h3>
+      <div class="history">
+        <div class="controls">
+          <button id="undo" class="ghost">되돌리기(마지막 단어 복구)</button>
+          <button id="resetUsed" class="ghost">사용 기록 초기화</button>
+        </div>
+        <div id="histList" class="list" aria-label="최근 단어"></div>
+      </div>
+    </section>
+  </div>
+
+  <footer>© 2025 CatchMind Kit V3 · 로컬 저장(localStorage) · 오프라인 사용 가능</footer>
+</div>
+
+<!-- Big Reveal Overlay -->
+<div class="reveal" id="reveal" aria-live="assertive">
+  <div class="reveal-box">
+    <div id="bigWord" class="word">단어</div>
+    <div class="tiny" id="metaTiny">카테고리 - 언어</div>
+    <div class="big-controls">
+      <button id="closeReveal" class="ghost">닫기</button>
+      <button id="nextWord" class="ok">다음 단어</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal" id="settings">
+  <div class="box">
+    <div class="top">
+      <h3 style="margin:0">설정 · 단어 편집/저장/불러오기</h3>
+      <div class="row">
+        <button id="importLib" class="ghost">불러오기</button>
+        <button id="exportLib" class="ghost">내보내기</button>
+        <button id="closeSettings" class="ghost">닫기</button>
+      </div>
+    </div>
+    <div class="controls" style="margin:6px 0">
+      <span class="chip">현재 단어 <b id="libCount">0</b>개</span>
+      <label>언어
+        <select id="setLang">
+          <option value="ko">한국어</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+      <label>포맷
+        <select id="fmt">
+          <option value="csv">CSV/쉼표+줄바꿈</option>
+          <option value="json">JSON</option>
+        </select>
+      </label>
+      <button id="saveLib" class="ok">저장 (로컬)</button>
+    </div>
+    <textarea id="editor" placeholder="CSV는 '카테고리,단어' 형식도 허용합니다. JSON은 {카테고리:[단어,...]} 형태"></textarea>
+  </div>
+</div>
+
+<script>
+// ===== Word Banks (ko/en) =====
+const bank = {
+  ko: {
+    "동물":["고양이","강아지","토끼","사자","호랑이","코끼리","기린","원숭이","판다","펭귄","돌고래","상어","문어","거북이","개구리","나비","벌","부엉이","참새","여우"],
+    "음식":["피자","햄버거","치킨","떡볶이","라면","김밥","초밥","파스타","샐러드","불고기","비빔밥","만두","김치","탕수육","케이크","쿠키","도넛","아이스크림","사과","바나나"],
+    "사물":["연필","지우개","책","가방","자","가위","컵","접시","시계","안경","의자","책상","침대","컴퓨터","키보드","마우스","전화기","모니터","우산","달력"],
+    "장소":["학교","병원","은행","도서관","공원","해변","산","동물원","수족관","식당","카페","영화관","놀이공원","집","아파트","역","공항","도로","다리","터널"],
+    "놀이":["축구","야구","농구","배구","테니스","탁구","배드민턴","수영","줄넘기","숨바꼭질","술래잡기","그네","시소","미끄럼틀","보드게임","퍼즐","로봇","카드","팽이","윷놀이"],
+    "직업":["선생님","의사","간호사","경찰","소방관","요리사","가수","배우","운동선수","화가","작가","과학자","엔지니어","프로그래머","디자이너","건축가","파일럿","유튜버","군인","농부"],
+    "자연":["해","달","별","구름","비","눈","바람","무지개","꽃","나무","바다","강","호수","폭포","섬","산","화산","사막","동굴","언덕"]
+  },
+  en: {
+    "Animals":["cat","dog","rabbit","lion","tiger","elephant","giraffe","monkey","panda","penguin","dolphin","shark","octopus","turtle","frog","butterfly","bee","owl","sparrow","fox"],
+    "Food":["pizza","hamburger","chicken","tteokbokki","ramen","gimbap","sushi","pasta","salad","bulgogi","bibimbap","dumpling","kimchi","sweet and sour pork","cake","cookie","donut","ice cream","apple","banana"],
+    "Objects":["pencil","eraser","book","bag","ruler","scissors","cup","plate","clock","glasses","chair","desk","bed","computer","keyboard","mouse","phone","monitor","umbrella","calendar"],
+    "Places":["school","hospital","bank","library","park","beach","mountain","zoo","aquarium","restaurant","cafe","cinema","amusement park","home","apartment","station","airport","road","bridge","tunnel"],
+    "Play":["soccer","baseball","basketball","volleyball","tennis","table tennis","badminton","swimming","jump rope","hide-and-seek","tag","swing","seesaw","slide","board game","puzzle","robot","card","top","yut"],
+    "Jobs":["teacher","doctor","nurse","police","firefighter","chef","singer","actor","athlete","painter","writer","scientist","engineer","programmer","designer","architect","pilot","youtuber","soldier","farmer"],
+    "Nature":["sun","moon","star","cloud","rain","snow","wind","rainbow","flower","tree","sea","river","lake","waterfall","island","mountain","volcano","desert","cave","hill"]
+  }
+};
+
+// ===== State & Helpers =====
+let lang = 'ko';
+let used = new Set();
+let history = []; // stack of picked words
+let currentCat = '';
+let pool = []; // words for selected cat (with '전체')
+let lastWord = '-';
+
+const $ = sel => document.querySelector(sel);
+const $$ = sel => [...document.querySelectorAll(sel)];
+function allWordsFor(langKey){
+  const obj = bank[langKey]; return Object.values(obj).flat();
+}
+function updateCounts(){
+  $('#poolCount').textContent = pool.length;
+  const remain = pool.filter(w=>!used.has(w)).length;
+  $('#remainCount').textContent = remain;
+  $('#lastWord').textContent = lastWord;
+}
+function setCategories(){
+  const catSel = $('#cat');
+  catSel.innerHTML = '';
+  const cats = Object.keys(bank[lang]);
+  const options = ['전체', ...cats];
+  for(const c of options){
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    catSel.appendChild(opt);
+  }
+  currentCat = '전체';
+  catSel.value = currentCat;
+  rebuildPool();
+}
+function rebuildPool(){
+  pool = (currentCat==='전체')
+    ? allWordsFor(lang)
+    : (bank[lang][currentCat]||[]).slice();
+  updateCounts();
+}
+function randPick(array){
+  if(array.length===0) return null;
+  const i = Math.floor(Math.random()*array.length);
+  return array[i];
+}
+
+// ===== Picking & Reveal =====
+let hue = 0;
+function nextGradient(){
+  hue = (hue + 37) % 360;
+  return `linear-gradient(90deg, hsl(${hue} 90% 60%), hsl(${(hue+60)%360} 90% 65%), hsl(${(hue+120)%360} 90% 60%))`;
+}
+function showReveal(word){
+  const big = $('#bigWord');
+  big.textContent = word;
+  big.style.backgroundImage = nextGradient();
+  $('#metaTiny').textContent = `${currentCat} · ${lang==='ko'?'한국어':'English'}`;
+  $('#reveal').classList.add('active');
+}
+function pickWord(){
+  const norepeat = $('#norepeat').checked;
+  let candidates = pool;
+  if(norepeat){ candidates = pool.filter(w=>!used.has(w)); }
+  if(candidates.length===0){
+    alert('선택된 풀에서 모든 단어를 사용했습니다. 사용 기록을 초기화합니다.');
+    used.clear(); history=[]; renderHistory(); candidates = pool.slice();
+  }
+  const w = randPick(candidates);
+  if(!w) return;
+  lastWord = w;
+  history.push(w);
+  renderHistory();
+  if($('#sound').checked) ding();
+  if($('#autotimer').checked) startTimer(true);
+  showReveal(w);
+  if(norepeat) used.add(w);
+  updateCounts();
+}
+$('#pick').addEventListener('click', pickWord);
+$('#closeReveal').addEventListener('click', ()=> $('#reveal').classList.remove('active'));
+$('#nextWord').addEventListener('click', pickWord);
+
+// ===== History & Undo =====
+function renderHistory(){
+  const box = $('#histList');
+  box.innerHTML = history.slice(-40).map(w=>`<span class="token">${w}</span>`).join('');
+}
+$('#undo').addEventListener('click', ()=>{
+  if(history.length===0) return;
+  const w = history.pop();
+  used.delete(w); // return to pool
+  lastWord = history[history.length-1] || '-';
+  renderHistory(); updateCounts();
+});
+
+$('#resetUsed').addEventListener('click', ()=>{ used.clear(); history=[]; renderHistory(); updateCounts(); });
+
+// ===== Timer with Presets =====
+let tHandle=null, tRemain=30, tTotal=30;
+function fmt(sec){ const m=String(Math.floor(sec/60)).padStart(2,'0'); const s=String(Math.max(0,Math.floor(sec%60))).padStart(2,'0'); return `${m}:${s}`;}
+function setRemain(v){
+  tRemain = Math.max(0, v);
+  $('#clock').textContent = fmt(tRemain);
+  $('#bar').style.transform = `scaleX(${tRemain/tTotal})`;
+}
+function startTimer(fromPicker=false){
+  if(tHandle) clearInterval(tHandle);
+  tTotal = parseInt($('#sec').value||30,10);
+  if(isNaN(tTotal)||tTotal<5) tTotal = 30;
+  setRemain(tTotal);
+  const start = performance.now();
+  const step=()=>{
+    const elapsed=(performance.now()-start)/1000;
+    setRemain(tTotal - elapsed);
+    if(tRemain<=0){
+      clearInterval(tHandle); tHandle=null; setRemain(0); beep();
+    }
+  };
+  tHandle = setInterval(step, 50);
+}
+function pauseTimer(){ if(tHandle){ clearInterval(tHandle); tHandle=null; } }
+function resetTimer(){ pauseTimer(); tTotal=parseInt($('#sec').value||30,10); if(isNaN(tTotal)||tTotal<5) tTotal=30; setRemain(tTotal); }
+function clickPreset(sec){
+  $$('.preset button').forEach(x=>x.classList.remove('active'));
+  const b = $$('.preset button').find(x=>x.dataset.sec===String(sec));
+  if(b) b.classList.add('active');
+  $('#sec').value = sec; resetTimer();
+}
+$$('.preset button').forEach(b=> b.addEventListener('click', ()=>{
+  clickPreset(b.dataset.sec);
+}));
+resetTimer();
+
+// ===== Sound =====
+function ding(){
+  const ctx = new (window.AudioContext||window.webkitAudioContext)();
+  const o = ctx.createOscillator(); const g = ctx.createGain();
+  o.type='triangle'; o.frequency.value=740;
+  o.connect(g); g.connect(ctx.destination);
+  g.gain.setValueAtTime(0.0001, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime+0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.25);
+  o.start(); o.stop(ctx.currentTime+0.27);
+}
+function beep(){
+  const ctx = new (window.AudioContext||window.webkitAudioContext)();
+  const o = ctx.createOscillator(); const g = ctx.createGain();
+  o.type='sine'; o.frequency.value=880;
+  o.connect(g); g.connect(ctx.destination);
+  g.gain.setValueAtTime(0.0001, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime+0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.5);
+  o.start(); o.stop(ctx.currentTime+0.52);
+}
+
+// ===== Fullscreen =====
+$('#fullscreen').addEventListener('click', ()=>{
+  const el = document.documentElement;
+  if(!document.fullscreenElement){ el.requestFullscreen?.(); }
+  else{ document.exitFullscreen?.(); }
+});
+
+// ===== Settings (modal) & Library =====
+function serializeCSV(obj){
+  const lines=[];
+  for(const [cat,arr] of Object.entries(obj)){ for(const w of arr) lines.push(`${cat},${w}`); }
+  return lines.join('\n');
+}
+function toJSONtext(obj){ return JSON.stringify(obj, null, 2); }
+function parseCSV(text){
+  const out={};
+  for(const line of text.split(/\r?\n/)){
+    const s=line.trim(); if(!s) continue;
+    const parts=s.split(',').map(x=>x.trim()).filter(Boolean);
+    if(parts.length===1){ out["기타"] = out["기타"]||[]; out["기타"].push(parts[0]); }
+    else{ const [cat,word] = [parts[0], parts.slice(1).join(',')]; if(!out[cat]) out[cat]=[]; out[cat].push(word); }
+  }
+  return out;
+}
+function refreshEditor(){
+  const langKey = $('#setLang').value;
+  const data = bank[langKey];
+  $('#libCount').textContent = Object.values(data).reduce((a,b)=>a+b.length,0);
+  const fmt = $('#fmt').value;
+  $('#editor').value = (fmt==='csv') ? serializeCSV(data) : toJSONtext(data);
+}
+
+// Local storage load/save
+(function initFromStorage(){
+  const koSaved = localStorage.getItem('catchmind_ko');
+  const enSaved = localStorage.getItem('catchmind_en');
+  if(koSaved){ try{ bank.ko = JSON.parse(koSaved); }catch{} }
+  if(enSaved){ try{ bank.en = JSON.parse(enSaved); }catch{} }
+})();
+
+// Open/Close settings
+$('#openSettings').addEventListener('click', ()=>{
+  $('#setLang').value = lang;
+  refreshEditor();
+  $('#settings').classList.add('active');
+});
+$('#closeSettings').addEventListener('click', ()=> $('#settings').classList.remove('active'));
+
+// Editor controls
+$('#fmt').addEventListener('change', refreshEditor);
+$('#setLang').addEventListener('change', refreshEditor);
+$('#saveLib').addEventListener('click', ()=>{
+  try{
+    const langKey = $('#setLang').value;
+    const fmt = $('#fmt').value;
+    const text = $('#editor').value;
+    const data = (fmt==='csv') ? parseCSV(text) : JSON.parse(text);
+    bank[langKey] = data;
+    localStorage.setItem('catchmind_'+langKey, JSON.stringify(data));
+    if(lang===langKey){ setCategories(); }
+    alert('저장 완료!');
+  }catch(e){ alert('저장 실패: 형식을 확인해주세요.'); }
+});
+$('#importLib').addEventListener('click', ()=>{
+  const text = prompt('붙여넣기( CSV 또는 JSON )');
+  if(!text) return;
+  try{
+    let data;
+    try{ data = JSON.parse(text); }
+    catch{ data = parseCSV(text); }
+    const langKey = $('#setLang').value;
+    bank[langKey] = data;
+    localStorage.setItem('catchmind_'+langKey, JSON.stringify(data));
+    if(lang===langKey){ setCategories(); }
+    refreshEditor();
+    alert('불러오기 완료!');
+  }catch(e){ alert('불러오기 실패: 형식을 확인해주세요.'); }
+});
+$('#exportLib').addEventListener('click', ()=>{
+  const langKey = $('#setLang').value;
+  const blob = new Blob([toJSONtext(bank[langKey])], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `catchmind_${langKey}.json`; a.click();
+  setTimeout(()=> URL.revokeObjectURL(url), 500);
+});
+
+// UI Bindings for main picker
+$('#lang').addEventListener('change', e=>{ lang = e.target.value; setCategories(); });
+$('#cat').addEventListener('change', e=>{ currentCat = e.target.value; rebuildPool(); });
+setCategories(); // init
+updateCounts();
+
+// ===== Keyboard Shortcuts =====
+document.addEventListener('keydown', (e)=>{
+  if(e.target.matches('input,textarea')) return;
+  const k = e.key.toLowerCase();
+  if(k===' '){ e.preventDefault(); pickWord(); }
+  else if(k==='n'){ pickWord(); }
+  else if(k==='escape'){ $('#reveal').classList.remove('active'); }
+  else if(k==='f'){ const el=document.documentElement; if(!document.fullscreenElement){ el.requestFullscreen?.(); } else{ document.exitFullscreen?.(); } }
+  else if(k==='1'){ clickPreset(30); }
+  else if(k==='2'){ clickPreset(60); }
+  else if(k==='3'){ clickPreset(180); }
+  else if(k==='4'){ clickPreset(300); }
+});
+</script>
+</body>
+</html>
