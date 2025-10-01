@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>캐치마인드 제시어 30 랜덤 뽑기</title>
+<style>
+  :root { --bg:#0b0f14; --fg:#e8f0ff; --muted:#9fb3c8; --accent:#7cc4ff; }
+  html,body{height:100%; margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--fg);}
+  .wrap{display:flex; flex-direction:column; min-height:100%; align-items:center; justify-content:center; gap:20px; padding:24px;}
+  h1{font-size:20px; font-weight:700; color:var(--muted); margin:0 0 4px;}
+  .result{font-size:44px; font-weight:800; text-align:center; line-height:1.2; padding:20px 24px; border-radius:16px; background:#111826; border:1px solid #1f2b3a; min-width:260px; min-height:88px; display:flex; align-items:center; justify-content:center;}
+  .btns{display:flex; flex-wrap:wrap; gap:12px; justify-content:center;}
+  button{font-size:18px; font-weight:700; padding:14px 18px; border-radius:14px; border:1px solid #203246; background:#132133; color:var(--fg);}
+  button:active{transform:scale(0.98);}
+  .muted{color:var(--muted); font-size:14px;}
+  .row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center;}
+  input[type="checkbox"]{width:22px; height:22px;}
+  .pill{border:1px solid #2a3c52; background:#0e1a29; padding:8px 12px; border-radius:999px; color:var(--muted); font-size:14px;}
+  details{max-width:820px; width:100%;}
+  summary{cursor:pointer; user-select:none; padding:12px; border:1px solid #22344a; border-radius:12px; background:#0e1a29; color:var(--muted);}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:8px; margin-top:12px;}
+  .tag{padding:8px 10px; background:#0b1624; border:1px solid #203246; border-radius:10px; text-align:center; font-size:14px; color:#cfe2ff;}
+  .history{max-width:820px; width:100%; border:1px dashed #2b3d53; border-radius:12px; padding:12px;}
+  .small{font-size:12px; color:#9fb3c8;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>캐치마인드 제시어 30 랜덤 뽑기</h1>
+    <div class="result" id="result">눌러서 뽑기!</div>
+    <div class="btns">
+      <button id="pickBtn">🎲 1개 뽑기</button>
+      <button id="resetBtn">🔄 초기화</button>
+      <button id="copyBtn">📋 복사</button>
+      <button id="fsBtn">⛶ 전체화면</button>
+    </div>
+    <div class="row">
+      <label class="pill"><input type="checkbox" id="noRepeat" checked> 중복 없이 뽑기</label>
+      <span class="pill" id="leftInfo">남은 제시어: 30</span>
+    </div>
+    <details>
+      <summary>제시어 목록 보기/숨기기</summary>
+      <div class="grid" id="listGrid"></div>
+    </details>
+    <div class="history">
+      <div class="small">히스토리</div>
+      <div id="history"></div>
+    </div>
+    <div class="muted">팁: "중복 없이" 옵션을 켜면 30개 모두 소진될 때까지 겹치지 않아요.</div>
+  </div>
+
+<script>
+const words = [
+  "고양이","토끼","물고기","사자","코끼리",
+  "피자","햄버거","아이스크림","연필","자전거",
+  "농구","야구","수영","스키","학교",
+  "병원","놀이공원","비행기","피카츄","마리오",
+  "숙제","시험","사랑","공포","유튜버",
+  "대통령","외계인","좀비","아이돌","선생님"
+];
+
+let bag = [...words];
+let history = [];
+const resultEl = document.getElementById('result');
+const leftInfo = document.getElementById('leftInfo');
+const listGrid = document.getElementById('listGrid');
+const historyEl = document.getElementById('history');
+const noRepeatEl = document.getElementById('noRepeat');
+
+function renderList() {
+  listGrid.innerHTML = words.map(w => {
+    const used = history.includes(w);
+    return `<div class="tag" style="opacity:${used?0.45:1}">${w}</div>`;
+  }).join('');
+  leftInfo.textContent = `남은 제시어: ${bag.length}`;
+}
+function pickOne() {
+  if (noRepeatEl.checked) {
+    if (bag.length === 0) {
+      resultEl.textContent = "모두 소진! 🔄 초기화하세요";
+      return;
+    }
+    const idx = Math.floor(Math.random()*bag.length);
+    const w = bag.splice(idx,1)[0];
+    history.unshift(w);
+    updateUI(w);
+  } else {
+    const w = words[Math.floor(Math.random()*words.length)];
+    history.unshift(w);
+    updateUI(w);
+  }
+}
+function updateUI(w) {
+  resultEl.textContent = w;
+  historyEl.innerHTML = history.slice(0,10).map((h,i)=>`<span class="tag">${h}</span>`).join(' ');
+  renderList();
+}
+function resetAll() {
+  bag = [...words];
+  history = [];
+  resultEl.textContent = "눌러서 뽑기!";
+  renderList();
+  historyEl.innerHTML = "";
+}
+document.getElementById('pickBtn').addEventListener('click', pickOne);
+document.getElementById('resetBtn').addEventListener('click', resetAll);
+document.getElementById('copyBtn').addEventListener('click', () => {
+  navigator.clipboard.writeText(resultEl.textContent || "").then(()=>{
+    const t = resultEl.textContent;
+    resultEl.textContent = (t? t+" (복사됨!)":"복사 완료");
+    setTimeout(()=>{ if(t) resultEl.textContent = t; }, 900);
+  });
+});
+document.getElementById('fsBtn').addEventListener('click', () => {
+  const el = document.documentElement;
+  if (!document.fullscreenElement) el.requestFullscreen().catch(()=>{});
+  else document.exitFullscreen();
+});
+resultEl.addEventListener('click', pickOne);
+
+renderList();
+</script>
+</body>
+</html>
