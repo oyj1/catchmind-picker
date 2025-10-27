@@ -18,6 +18,26 @@ Animals,bee
 Animals,owl
 Animals,sparrow
 Animals,fox
+Animals,wolf
+Animals,pig
+Animals,cow
+Animals,horse
+Animals,sheep
+Animals,goat
+Animals,chicken
+Animals,eagle
+Animals,crane
+Animals,hippopotamus
+Animals,rhinoceros
+Animals,kangaroo
+Animals,koala
+Animals,cheetah
+Animals,leopard
+Animals,seal
+Animals,sea lion
+Animals,otter
+Animals,squirrel
+Animals,whale
 Food,pizza
 Food,hamburger
 Food,chicken
@@ -38,6 +58,26 @@ Food,donut
 Food,ice cream
 Food,apple
 Food,banana
+Food,japchae
+Food,galbi
+Food,samgyeopsal
+Food,soft tofu stew
+Food,kimchi stew
+Food,soybean paste stew
+Food,ssambap
+Food,naengmyeon
+Food,bibim guksu
+Food,kalguksu
+Food,hotteok
+Food,bungeoppang
+Food,tteokgalbi
+Food,rolled omelette
+Food,stir-fried baby octopus
+Food,french fries
+Food,hot dog
+Food,kimchi pancake
+Food,seafood green onion pancake
+Food,toast
 Objects,pencil
 Objects,eraser
 Objects,book
@@ -58,6 +98,26 @@ Objects,phone
 Objects,monitor
 Objects,umbrella
 Objects,calendar
+Objects,flashlight
+Objects,remote control
+Objects,toothbrush
+Objects,comb
+Objects,mailbox
+Objects,trash can
+Objects,key
+Objects,ballpoint pen
+Objects,notebook
+Objects,earphones
+Objects,camera
+Objects,mirror
+Objects,tent
+Objects,battery
+Objects,charger
+Objects,stamp
+Objects,recycling bag
+Objects,chopsticks
+Objects,sticky note
+Objects,tape
 Places,school
 Places,hospital
 Places,bank
@@ -78,6 +138,26 @@ Places,airport
 Places,road
 Places,bridge
 Places,tunnel
+Places,market
+Places,supermarket
+Places,convenience store
+Places,gymnasium
+Places,art museum
+Places,museum
+Places,stadium
+Places,bus stop
+Places,subway station
+Places,playground
+Places,factory
+Places,office
+Places,meeting room
+Places,rooftop
+Places,parking lot
+Places,bookstore
+Places,bakery
+Places,sunset park
+Places,Han River
+Places,campsite
 Play,soccer
 Play,baseball
 Play,basketball
@@ -98,6 +178,26 @@ Play,robot
 Play,card
 Play,top
 Play,yut
+Play,bike riding
+Play,skating
+Play,kick scooter
+Play,snowball fight
+Play,building sandcastles
+Play,kite flying
+Play,jegichagi
+Play,dodgeball
+Play,omok
+Play,janggi
+Play,chess
+Play,Rubik's cube
+Play,ddakji
+Play,balloon popping
+Play,box sledding
+Play,trampoline
+Play,hopscotch
+Play,arm wrestling
+Play,bracelet making
+Play,scavenger hunt
 Jobs,teacher
 Jobs,doctor
 Jobs,nurse
@@ -118,6 +218,26 @@ Jobs,pilot
 Jobs,youtuber
 Jobs,soldier
 Jobs,farmer
+Jobs,baker
+Jobs,barista
+Jobs,photographer
+Jobs,journalist
+Jobs,pharmacist
+Jobs,veterinarian
+Jobs,judge
+Jobs,lawyer
+Jobs,accountant
+Jobs,translator
+Jobs,dancer
+Jobs,game developer
+Jobs,animator
+Jobs,data analyst
+Jobs,marketer
+Jobs,UX designer
+Jobs,product manager
+Jobs,flight attendant
+Jobs,coast guard rescuer
+Jobs,sanitation worker
 Nature,sun
 Nature,moon
 Nature,star
@@ -138,6 +258,26 @@ Nature,volcano
 Nature,desert
 Nature,cave
 Nature,hill
+Nature,valley
+Nature,field
+Nature,grassland
+Nature,glacier
+Nature,tsunami
+Nature,wave
+Nature,moss
+Nature,sand
+Nature,autumn leaves
+Nature,sea fog
+Nature,frost
+Nature,fog
+Nature,thunder
+Nature,lightning
+Nature,shooting star
+Nature,aurora
+Nature,pebbles
+Nature,mud
+Nature,icicle
+Nature,spring water
 Countries,South Korea
 Countries,Japan
 Countries,China
@@ -218,3 +358,43 @@ Emotions,depression
 Emotions,jealousy
 Emotions,restlessness
 Emotions,lethargy
+Proverbs,piece of cake
+Proverbs,pearls must be strung to be treasure
+Proverbs,kind words bring kind words
+Proverbs,even a sheet of paper is lighter together
+Proverbs,"when whales fight, the shrimp gets hurt"
+Proverbs,the frog forgets its tadpole days
+Proverbs,even monkeys fall from trees
+Proverbs,dust piles up into a mountain
+Proverbs,tap even a stone bridge before crossing
+Proverbs,enter the tiger's den to catch a cub
+Proverbs,using a rake for what a hoe could stop
+Proverbs,the day you go is market day
+Proverbs,it's dark under the lamp
+Proverbs,habits formed at three last until eighty
+Proverbs,stay true to your first resolve
+Proverbs,a needle thief becomes a cow thief
+Proverbs,an empty cart rattles loudly
+Proverbs,like hitting a rock with an egg
+Proverbs,eating rice cakes while lying down
+Proverbs,joy comes after hardship
+Proverbs,other people's rice cakes look bigger
+Proverbs,there's always someone better
+Proverbs,a word repays a thousand nyang of debt
+Proverbs,frog in a well
+Proverbs,no tree withstands ten chops
+Proverbs,knows one but not two
+Proverbs,eat the pheasant and its egg
+Proverbs,rice cake in a picture
+Proverbs,swimming with feet on the ground
+Proverbs,mountain after mountain
+Proverbs,fix the barn after losing the cow
+Proverbs,no smoke without fire
+Proverbs,the trusted axe cuts your foot
+Proverbs,"when pressed, a way opens"
+Proverbs,"the fuller the rice, the lower it bows"
+Proverbs,seeing once beats hearing a hundred times
+Proverbs,can't name even giyeok with a sickle
+Proverbs,tap even the stone bridge
+Proverbs,clear upstream makes clear downstream
+Proverbs,too many boatmen steer the boat astray
