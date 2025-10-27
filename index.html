@@ -297,13 +297,70 @@ const bank = {
     ]
   },
   en: {
-    "Animals":["cat","dog","rabbit","lion","tiger","elephant","giraffe","monkey","panda","penguin","dolphin","shark","octopus","turtle","frog","butterfly","bee","owl","sparrow","fox"],
-    "Food":["pizza","hamburger","chicken","tteokbokki","ramen","gimbap","sushi","pasta","salad","bulgogi","bibimbap","dumpling","kimchi","sweet and sour pork","cake","cookie","donut","ice cream","apple","banana"],
-    "Objects":["pencil","eraser","book","bag","ruler","scissors","cup","plate","clock","glasses","chair","desk","bed","computer","keyboard","mouse","phone","monitor","umbrella","calendar"],
-    "Places":["school","hospital","bank","library","park","beach","mountain","zoo","aquarium","restaurant","cafe","cinema","amusement park","home","apartment","station","airport","road","bridge","tunnel"],
-    "Play":["soccer","baseball","basketball","volleyball","tennis","table tennis","badminton","swimming","jump rope","hide-and-seek","tag","swing","seesaw","slide","board game","puzzle","robot","card","top","yut"],
-    "Jobs":["teacher","doctor","nurse","police","firefighter","chef","singer","actor","athlete","painter","writer","scientist","engineer","programmer","designer","architect","pilot","youtuber","soldier","farmer"],
-    "Nature":["sun","moon","star","cloud","rain","snow","wind","rainbow","flower","tree","sea","river","lake","waterfall","island","mountain","volcano","desert","cave","hill"]
+    "Animals":[
+      "cat","dog","rabbit","lion","tiger","elephant","giraffe","monkey","panda","penguin",
+      "dolphin","shark","octopus","turtle","frog","butterfly","bee","owl","sparrow","fox",
+      "wolf","pig","cow","horse","sheep","goat","chicken","eagle","crane","hippopotamus",
+      "rhinoceros","kangaroo","koala","cheetah","leopard","seal","sea lion","otter","squirrel","whale"
+    ],
+    "Food":[
+      "pizza","hamburger","chicken","tteokbokki","ramen","gimbap","sushi","pasta","salad","bulgogi",
+      "bibimbap","dumpling","kimchi","sweet and sour pork","cake","cookie","donut","ice cream","apple","banana",
+      "japchae","galbi","samgyeopsal","soft tofu stew","kimchi stew","soybean paste stew","ssambap","naengmyeon","bibim guksu","kalguksu",
+      "hotteok","bungeoppang","tteokgalbi","rolled omelette","stir-fried baby octopus","french fries","hot dog","kimchi pancake","seafood green onion pancake","toast"
+    ],
+    "Objects":[
+      "pencil","eraser","book","bag","ruler","scissors","cup","plate","clock","glasses",
+      "chair","desk","bed","computer","keyboard","mouse","phone","monitor","umbrella","calendar",
+      "flashlight","remote control","toothbrush","comb","mailbox","trash can","key","ballpoint pen","notebook","earphones",
+      "camera","mirror","tent","battery","charger","stamp","recycling bag","chopsticks","sticky note","tape"
+    ],
+    "Places":[
+      "school","hospital","bank","library","park","beach","mountain","zoo","aquarium","restaurant",
+      "cafe","cinema","amusement park","home","apartment","station","airport","road","bridge","tunnel",
+      "market","supermarket","convenience store","gymnasium","art museum","museum","stadium","bus stop","subway station","playground",
+      "factory","office","meeting room","rooftop","parking lot","bookstore","bakery","sunset park","Han River","campsite"
+    ],
+    "Play":[
+      "soccer","baseball","basketball","volleyball","tennis","table tennis","badminton","swimming","jump rope","hide-and-seek",
+      "tag","swing","seesaw","slide","board game","puzzle","robot","card","top","yut",
+      "bike riding","skating","kick scooter","snowball fight","building sandcastles","kite flying","jegichagi","dodgeball","omok","janggi",
+      "chess","Rubik's cube","ddakji","balloon popping","box sledding","trampoline","hopscotch","arm wrestling","bracelet making","scavenger hunt"
+    ],
+    "Jobs":[
+      "teacher","doctor","nurse","police","firefighter","chef","singer","actor","athlete","painter",
+      "writer","scientist","engineer","programmer","designer","architect","pilot","youtuber","soldier","farmer",
+      "baker","barista","photographer","journalist","pharmacist","veterinarian","judge","lawyer","accountant","translator",
+      "dancer","game developer","animator","data analyst","marketer","UX designer","product manager","flight attendant","coast guard rescuer","sanitation worker"
+    ],
+    "Nature":[
+      "sun","moon","star","cloud","rain","snow","wind","rainbow","flower","tree",
+      "sea","river","lake","waterfall","island","mountain","volcano","desert","cave","hill",
+      "valley","field","grassland","glacier","tsunami","wave","moss","sand","autumn leaves","sea fog",
+      "frost","fog","thunder","lightning","shooting star","aurora","pebbles","mud","icicle","spring water"
+    ],
+    "Countries":[
+      "South Korea","Japan","China","United States","United Kingdom","France","Germany","Italy","Spain","Russia",
+      "Brazil","Argentina","Australia","New Zealand","India","Indonesia","Vietnam","Thailand","Philippines","Malaysia",
+      "Singapore","Turkey","Greece","Egypt","Canada","Mexico","Saudi Arabia","South Africa","Netherlands","Sweden",
+      "Switzerland","Denmark","Norway","Finland","Poland","Czech Republic","Israel","Iran","Chile","Peru","Kuwait"
+    ],
+    "Emotions":[
+      "joy","sadness","anger","love","fear","embarrassment","surprise","loneliness","happiness","irritation",
+      "worry","gratitude","remorse","butterflies","dread","regret","boredom","excitement","pride","disappointment",
+      "amazement","tiredness","anticipation","courage","nervousness","anxiety","relief","hurt feelings","satisfaction","deeply moved",
+      "frustration","enjoyment","annoyance","confidence","calmness","depression","jealousy","restlessness","lethargy"
+    ],
+    "Saying":[
+      "piece of cake","pearls must be strung to be treasure","kind words bring kind words","even a sheet of paper is lighter together","when whales fight, the shrimp gets hurt",
+      "the frog forgets its tadpole days","even monkeys fall from trees","dust piles up into a mountain","tap even a stone bridge before crossing","enter the tiger's den to catch a cub",
+      "using a rake for what a hoe could stop","the day you go is market day","it's dark under the lamp","habits formed at three last until eighty","stay true to your first resolve",
+      "a needle thief becomes a cow thief","an empty cart rattles loudly","like hitting a rock with an egg","eating rice cakes while lying down","joy comes after hardship",
+      "other people's rice cakes look bigger","there's always someone better","a word repays a thousand nyang of debt","frog in a well","no tree withstands ten chops",
+      "knows one but not two","eat the pheasant and its egg","rice cake in a picture","swimming with feet on the ground","mountain after mountain",
+      "fix the barn after losing the cow","no smoke without fire","the trusted axe cuts your foot","when pressed, a way opens","the fuller the rice, the lower it bows",
+      "seeing once beats hearing a hundred times","can't name even giyeok with a sickle","tap even the stone bridge","clear upstream makes clear downstream","too many boatmen steer the boat astray"
+    ]
   }
 };
 
@@ -477,11 +534,22 @@ function serializeCSV(obj){
 function toJSONtext(obj){ return JSON.stringify(obj, null, 2); }
 function parseCSV(text){
   const out={};
-  for(const line of text.split(/\r?\n/)){
-    const s=line.trim(); if(!s) continue;
-    const parts=s.split(',').map(x=>x.trim()).filter(Boolean);
-    if(parts.length===1){ out["기타"] = out["기타"]||[]; out["기타"].push(parts[0]); }
-    else{ const [cat,word] = [parts[0], parts.slice(1).join(',')]; if(!out[cat]) out[cat]=[]; out[cat].push(word); }
+  for(const raw of text.split(/\r?\n/)){
+    const line = raw.trim();
+    if(!line) continue;
+    const idx = line.indexOf(',');
+    if(idx===-1){
+      out["기타"] = out["기타"]||[];
+      out["기타"].push(line);
+      continue;
+    }
+    const cat = line.slice(0, idx).trim();
+    let word = line.slice(idx+1).trim();
+    if((word.startsWith('"') && word.endsWith('"')) || (word.startsWith("'") && word.endsWith("'"))){
+      word = word.slice(1, -1);
+    }
+    if(!out[cat]) out[cat]=[];
+    out[cat].push(word);
   }
   return out;
 }
@@ -511,7 +579,8 @@ const BASE = (()=>{
 
 // 언어별로 불러올 파일 목록 (필요에 따라 추가/삭제)
 const DATA_FILES = {
-  ko: ['/data/ko.csv', '/data/ko_proverbs.csv']  // ko_proverbs.csv가 없으면 그냥 스킵됨
+  ko: ['/data/ko.csv', '/data/ko_proverbs.csv'],  // ko_proverbs.csv가 없으면 그냥 스킵됨
+  en: ['/data/en.csv']
 };
 
 // 버전 파일(선택): 값이 달라지면 강제 새로 로드
